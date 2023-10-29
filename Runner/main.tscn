@@ -1,0 +1,171 @@
+[gd_scene load_steps=21 format=3 uid="uid://d1qnkhs0aeye7"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_yqevp"]
+[ext_resource type="PackedScene" uid="uid://b7m60oh42mvy8" path="res://player_bah.tscn" id="2_5uucg"]
+[ext_resource type="Script" path="res://Meshs.gd" id="2_71kqe"]
+[ext_resource type="Texture2D" uid="uid://cblaax0rx5pwc" path="res://Models/Sky.png" id="2_wsgrd"]
+[ext_resource type="Texture2D" uid="uid://dro2i4cy6sxvx" path="res://Models/Right-Sky.png" id="3_6yf8w"]
+[ext_resource type="PackedScene" uid="uid://bb46xgcad0jed" path="res://door.tscn" id="3_pc2xy"]
+[ext_resource type="PackedScene" uid="uid://h1870gqdj8hw" path="res://back_ground.tscn" id="3_qo6cm"]
+[ext_resource type="FontFile" uid="uid://c7jvmgixs4j0l" path="res://Models/Black_Ops_One/BlackOpsOne-Regular.ttf" id="6_7vrby"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x1485"]
+albedo_texture = ExtResource("2_wsgrd")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_g5yj2"]
+size = Vector2(500, 500)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nc40l"]
+albedo_texture = ExtResource("3_6yf8w")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d12hm"]
+albedo_texture = ExtResource("2_wsgrd")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yje8b"]
+size = Vector3(100, 2, 10)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_2f1wh"]
+load_path = "res://.godot/imported/Path.png-0fa4026d0af21727c8fe05343893d185.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_focfo"]
+albedo_texture = SubResource("CompressedTexture2D_2f1wh")
+
+[sub_resource type="BoxMesh" id="BoxMesh_goj55"]
+size = Vector3(100, 2, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ru7d1"]
+albedo_texture = SubResource("CompressedTexture2D_2f1wh")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j3awa"]
+size = Vector3(100, 4, 2)
+
+[sub_resource type="Theme" id="Theme_x1iuf"]
+default_font = ExtResource("6_7vrby")
+default_font_size = 44
+
+[sub_resource type="Theme" id="Theme_d763w"]
+default_font = ExtResource("6_7vrby")
+default_font_size = 22
+
+[node name="Main" type="Node" node_paths=PackedStringArray("currentDoor", "questionLabel")]
+script = ExtResource("1_yqevp")
+currentDoor = NodePath("Door-1")
+questionLabel = NodePath("Math-Problem")
+
+[node name="Sky_Box" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 110, 0)
+
+[node name="Front" type="MeshInstance3D" parent="Sky_Box"]
+transform = Transform3D(9.43724e-08, 1.25, -5.46392e-08, 0, -5.46392e-08, -1.25, -1.25, 9.43724e-08, -4.12515e-15, -450, 125, 0)
+material_override = SubResource("StandardMaterial3D_x1485")
+mesh = SubResource("PlaneMesh_g5yj2")
+
+[node name="Right" type="MeshInstance3D" parent="Sky_Box"]
+transform = Transform3D(1.25, 1.04399e-22, -4.56341e-30, 0, -5.46392e-08, -1.25, -1.04399e-22, 1.25, -5.46392e-08, -200, 125, -250)
+material_override = SubResource("StandardMaterial3D_nc40l")
+mesh = SubResource("PlaneMesh_g5yj2")
+
+[node name="Left" type="MeshInstance3D" parent="Sky_Box"]
+transform = Transform3D(-1.25, 1.88745e-07, -8.25029e-15, 0, -5.46392e-08, -1.25, -1.88745e-07, -1.25, 5.46392e-08, -200, 125, 250)
+material_override = SubResource("StandardMaterial3D_d12hm")
+mesh = SubResource("PlaneMesh_g5yj2")
+
+[node name="Ground" type="StaticBody3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+shape = SubResource("BoxShape3D_yje8b")
+
+[node name="Meshs" type="Node3D" parent="Ground" groups=["GroundMeshes"]]
+script = ExtResource("2_71kqe")
+groundSpacing = 50.0
+
+[node name="Back_Ground" parent="Ground/Meshs" instance=ExtResource("3_qo6cm")]
+
+[node name="2Back_Ground" parent="Ground/Meshs" instance=ExtResource("3_qo6cm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 0)
+
+[node name="Middle_Ground" type="MeshInstance3D" parent="Ground/Meshs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+material_override = SubResource("StandardMaterial3D_focfo")
+mesh = SubResource("BoxMesh_goj55")
+skeleton = NodePath("../..")
+
+[node name="2Middle_Ground" type="MeshInstance3D" parent="Ground/Meshs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -1, 0)
+material_override = SubResource("StandardMaterial3D_ru7d1")
+mesh = SubResource("BoxMesh_goj55")
+skeleton = NodePath("../..")
+
+[node name="Map Border" type="Node3D" parent="Ground/Meshs"]
+
+[node name="Right_Colision" type="StaticBody3D" parent="Ground/Meshs/Map Border"]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/Meshs/Map Border/Right_Colision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+shape = SubResource("BoxShape3D_j3awa")
+
+[node name="Left_Colision" type="StaticBody3D" parent="Ground/Meshs/Map Border"]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/Meshs/Map Border/Left_Colision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+shape = SubResource("BoxShape3D_j3awa")
+
+[node name="Camera" type="Marker3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Camera"]
+transform = Transform3D(-4.37114e-08, -0.258819, 0.965926, 0, 0.965926, 0.258819, -1, 1.13133e-08, -4.2222e-08, 10, 4, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.71623, -0.137022, 0.68428, -0.284301, 0.838189, 0.465416, -0.637328, -0.527887, 0.561381, 4.88491, 7.11008, 8.82858)
+
+[node name="Player-bah" parent="." instance=ExtResource("2_5uucg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6, 0.75, 0)
+
+[node name="Door-1" parent="." instance=ExtResource("3_pc2xy")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -40, 0, 2.5)
+
+[node name="Score" type="Label" parent="."]
+offset_left = 24.0
+offset_right = 279.0
+offset_bottom = 136.0
+theme = SubResource("Theme_x1iuf")
+theme_override_colors/font_color = Color(0.54902, 0.54902, 0.54902, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "Pontuação"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Math-Problem" type="Label" parent="."]
+offset_left = 512.0
+offset_top = 32.0
+offset_right = 845.0
+offset_bottom = 120.0
+theme = SubResource("Theme_x1iuf")
+theme_override_colors/font_color = Color(0.54902, 0.54902, 0.54902, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "Math Problem"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Restart-Button" type="Button" parent="."]
+visible = false
+offset_left = 584.0
+offset_top = 424.0
+offset_right = 776.0
+offset_bottom = 512.0
+theme = SubResource("Theme_d763w")
+theme_override_colors/font_color = Color(0.54902, 0.54902, 0.54902, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+disabled = true
+text = "Recomeçar
+"
+
+[connection signal="pressed" from="Restart-Button" to="." method="_on_restart_button_pressed"]
